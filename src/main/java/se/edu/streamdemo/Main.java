@@ -3,8 +3,11 @@ package se.edu.streamdemo;
 import se.edu.streamdemo.data.Datamanager;
 import se.edu.streamdemo.task.Deadline;
 import se.edu.streamdemo.task.Task;
+import se.edu.streamdemo.task.TaskComparator;
 
 import java.util.ArrayList;
+
+import static java.util.stream.Collectors.toList;
 
 public class Main {
     public static void main(String[] args) {
@@ -16,10 +19,11 @@ public class Main {
         printAllData(tasksData);
 
         System.out.println("Printing deadlines ...");
-        printDeadlines(tasksData);
+        printSortedDeadlinesByStream(tasksData);
 
         System.out.println("Total number of deadlines: " + countDeadlines(tasksData));
-
+        ArrayList<Task> filter = filterTaskByStream(tasksData, "7");
+        printAllData(filter);
     }
 
     private static int countDeadlines(ArrayList<Task> tasksData) {
@@ -46,4 +50,17 @@ public class Main {
         }
     }
 
+    public static void printSortedDeadlinesByStream(ArrayList<Task> tasksData) {
+        tasksData.stream()
+                .filter(t -> t instanceof Deadline)
+                .sorted((t1, t2) -> t1.getDescription().compareTo(t2.getDescription()))
+                .forEach(System.out::println);
+    }
+
+    public static ArrayList<Task> filterTaskByStream(ArrayList<Task> tasksData, String filterString) {
+        ArrayList<Task> filtered = (ArrayList<Task>) tasksData.stream()
+                .filter(t -> t.getDescription().contains(filterString))
+                .collect(toList());
+        return filtered;
+    }
 }
