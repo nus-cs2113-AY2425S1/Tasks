@@ -13,6 +13,8 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 
 public class Datamanager {
+    public static final String TODO = "T";
+    public static final String DEADLINE = "D";
     private File dataFile;
 
     public File getDataFile() {
@@ -68,11 +70,11 @@ public class Datamanager {
             String taskDescription = getTaskDescription(line);
             String taskType = getTaskType(line);
             switch (taskType) {
-            case "T":
+            case TODO:
                 Todo todo = new Todo(taskDescription);
                 allTasks.add(todo);
                 break;
-            case "D":
+            case DEADLINE:
                 Deadline deadline = new Deadline(taskDescription);
                 allTasks.add(deadline);
                 break;
